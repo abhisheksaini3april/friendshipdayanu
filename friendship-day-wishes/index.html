@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Friendship Day Anu 💖</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffe0ec, #fad0c4);
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 50px auto;
+      animation: fadeIn 1.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #bb377d;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 2px solid #bb377d;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px 25px;
+      background-color: #bb377d;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #a82e6c;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      #yesButton,
+      #noButton {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .floating-gallery {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .gallery-img {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 15px;
+      object-fit: cover;
+      opacity: 0.85;
+      animation: floatImage linear infinite;
+    }
+
+    @keyframes floatImage {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-150vh) rotate(360deg); }
+    }
+
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      color: #bb377d;
+      border-radius: 50%;
+      padding: 15px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2) rotate(720deg); opacity: 0; }
+    }
+
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url('https://i.imgur.com/5JxT1vU.png') no-repeat center;
+      background-size: contain;
+      animation: floatHeart 2s linear forwards;
+    }
+
+    @keyframes floatHeart {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      100% { transform: scale(2) translateY(-200px); opacity: 0; }
+    }
+
+    #popupMessage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 30px;
+      z-index: 99;
+      max-width: 90%;
+      text-align: center;
+      transition: transform 0.4s ease;
+    }
+
+    #popupMessage.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Happy Friendship Day, Anu! 💐</h1>
+    <p>Friends like you make every day brighter. Let's create endless memories together! 🌟</p>
+    <button id="yesButton">Yes, I accept your friendship 🤝</button>
+    <button id="noButton" style="margin-left: 10px; background-color: #f44336; position: relative;">No, sorry 🙁</button>
+    <p style="margin-top: 25px;">Leave a sweet message below 💌</p>
+    <input type="text" id="messageInput" placeholder="Type something you'd like to say...">
+    <button id="sendButton">Send on WhatsApp</button>
+  </div>
+
+  <div class="floating-gallery" id="floatingGallery"></div>
+  <div id="popupMessage"><h2>🎉 Yay Anu! 🎉</h2><p>I'm so happy you accepted my friendship! 🥰<br>Let’s make countless memories together. 💖</p></div>
+
+ 
+  <audio id="friendshipSong" src="../song.mp3" preload="auto"></audio>
+
+  <div class="music-toggle" id="musicToggle">🎵</div>
+
+  <script>
+    window.onload = function () {
+      const gallery = document.getElementById("floatingGallery");
+      const imageSources = [
+        "https://picsum.photos/100?1",
+        "https://picsum.photos/100?2",
+        "https://picsum.photos/100?3",
+        "https://picsum.photos/100?4",
+        "https://picsum.photos/100?5"
+      ];
+
+      for (let i = 0; i < 15; i++) {
+        const img = document.createElement('img');
+        img.src = imageSources[i % imageSources.length];
+        img.classList.add('gallery-img');
+        img.style.left = Math.random() * 100 + 'vw';
+        img.style.animationDuration = (10 + Math.random() * 10) + 's';
+        gallery.appendChild(img);
+      }
+
+      const music = document.getElementById('friendshipSong');
+      music.volume = 0.6;
+
+      let isPlaying = false;
+      document.getElementById('musicToggle').addEventListener('click', () => {
+        if (isPlaying) {
+          music.pause();
+        } else {
+          music.play().catch(err => console.log("Audio play failed:", err));
+        }
+        isPlaying = !isPlaying;
+      });
+
+      const yesBtn = document.getElementById("yesButton");
+      const noBtn = document.getElementById("noButton");
+      const sendBtn = document.getElementById("sendButton");
+      const popup = document.getElementById("popupMessage");
+
+      yesBtn.addEventListener("click", () => {
+        music.play().catch(err => console.log("Music couldn't play:", err));
+        popup.classList.add("show");
+        setTimeout(() => popup.classList.remove("show"), 5000);
+
+        for (let i = 0; i < 15; i++) {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.style.left = Math.random() * 100 + "vw";
+          heart.style.top = Math.random() * 80 + 10 + "vh";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }
+      });
+
+      noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * 300 - 150;
+        const y = Math.random() * 300 - 150;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+
+      noBtn.addEventListener("click", () => {
+        noBtn.style.animation = "explode 0.6s forwards";
+        setTimeout(() => noBtn.style.display = "none", 600);
+      });
+
+      sendBtn.addEventListener("click", () => {
+        const message = document.getElementById("messageInput").value.trim();
+        if (message === "") {
+          alert("Please enter a message before sending! 💬");
+          return;
+        }
+        const encodedMessage = encodeURIComponent("Hi Abhishek, Anu wrote: " + message);
+        const whatsappURL = `https://wa.me/917060876247?text=${encodedMessage}`;
+
+        const link = document.createElement("a");
+        link.href = whatsappURL;
+        link.target = "_blank";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    };
+  </script>
+</body>
+</html>
